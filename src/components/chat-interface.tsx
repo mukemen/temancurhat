@@ -15,6 +15,8 @@ interface Message {
   category?: string
 }
 
+type ConversationStage = 'opening' | 'initial_response' | 'digging_deeper' | 'validation' | 'empathy' | 'options' | 'support'
+
 interface ChatInterfaceProps {
   onBack?: () => void
 }
@@ -69,6 +71,8 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [currentMessage, setCurrentMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const [conversationStage, setConversationStage] = useState<ConversationStage>('opening')
+  const [userMessageCount, setUserMessageCount] = useState(0)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -81,6 +85,8 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category)
+    setConversationStage('opening')
+    setUserMessageCount(0)
     const randomOpeningMessage = openingMessages[Math.floor(Math.random() * openingMessages.length)]
     const welcomeMessage: Message = {
       id: Date.now().toString(),
@@ -91,13 +97,75 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
     setMessages([welcomeMessage])
   }
 
-  const getRandomResponse = (category: string) => {
-    const responses = mockResponses[category as keyof typeof mockResponses] || mockResponses.umum
+  const getContextualResponse = (stage: ConversationStage, category: string) => {
+    const stageResponses = {
+      initial_response: [
+        "Aku paham banget perasaan kamu... ceritain aja pelan-pelan ya, aku dengerin 😊",
+        "Terima kasih udah mau sharing sama aku. Yuk cerita lebih detail, aku siap dengerin semua",
+        "Aku ngerti ini pasti gak gampang buat kamu. Take your time ya, cerita seadanya aja dulu"
+      ],
+      digging_deeper: [
+        "Kalau boleh tahu, apa yang bikin kamu merasa seperti itu? Aku pengen ngerti lebih banyak supaya bisa nemenin kamu lebih baik.",
+        "Hmm, kedengarannya berat banget ya. Bisa cerita gimana awal mulanya sampai kamu ngerasain kayak gini?",
+        "Aku penasaran nih, udah berapa lama kamu ngerasain hal ini? Dan apa yang bikin kamu paling kesel atau sedih?"
+      ],
+      validation: [
+        "Terima kasih udah cerita jujur. Aku tahu itu gak selalu gampang. Kamu hebat karena mau terbuka 🙏",
+        "Wow, kamu berani banget ya bisa cerita hal sepersonal ini. Aku appreciate banget keberanian kamu",
+        "Thanks for trusting me ya. Aku ngehargain banget kepercayaan kamu buat sharing hal ini sama aku"
+      ],
+      empathy: [
+        "Perasaan kamu wajar banget. Siapapun di posisi kamu pasti bisa ngerasain hal yang sama. Kamu gak sendirian kok 💙",
+        "Aku paham banget kenapa kamu bisa ngerasa kayak gini. Reaksi kamu itu normal banget, dan valid kok",
+        "Honestly, kalau aku di posisi kamu mungkin bakal ngerasain hal yang sama. Kamu udah handle ini dengan baik banget"
+      ],
+      options: [
+        "Mau aku kasih kamu beberapa saran ringan supaya hati kamu agak lega? Atau kamu lebih pengen aku sekadar dengerin aja?",
+        "Gimana kalau kita coba pikirin bareng-bareng hal kecil yang bisa kamu lakuin? Atau kamu prefer aku cuma nemenin aja?",
+        "Aku bisa bantu kamu brainstorming kalau mau, atau kalau kamu butuh tempat curhat aja juga gapapa. Terserah kamu!"
+      ],
+      support: [
+        "Apapun pilihan kamu, aku tetap ada di sini buat nemenin. Kamu kuat, dan setiap langkah kecil itu berarti. Semangat ya 🌸",
+        "Remember ya, kamu udah survive sampai hari ini, berarti kamu strong banget. Aku bangga sama kamu 💪",
+        "Kamu amazing banget loh udah bisa handle semua ini. Jangan lupa kasih appreciation sama diri kamu sendiri ya 🤗"
+      ]
+    }
+
+    if (stage === 'opening') {
+      const responses = mockResponses[category as keyof typeof mockResponses] || mockResponses.umum
+      return responses[Math.floor(Math.random() * responses.length)]
+    }
+
+    const responses = stageResponses[stage] || stageResponses.support
     return responses[Math.floor(Math.random() * responses.length)]
+  }
+
+  const getNextStage = (currentStage: ConversationStage, messageCount: number): ConversationStage => {
+    switch (currentStage) {
+      case 'opening':
+        return 'initial_response'
+      case 'initial_response':
+        return messageCount >= 2 ? 'digging_deeper' : 'initial_response'
+      case 'digging_deeper':
+        return 'validation'
+      case 'validation':
+        return 'empathy'
+      case 'empathy':
+        return messageCount >= 4 ? 'options' : 'empathy'
+      case 'options':
+        return 'support'
+      case 'support':
+        return Math.random() > 0.6 ? 'options' : 'support'
+      default:
+        return 'support'
+    }
   }
 
   const handleSendMessage = async () => {
     if (!currentMessage.trim()) return
+
+    const newUserMessageCount = userMessageCount + 1
+    setUserMessageCount(newUserMessageCount)
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -110,15 +178,19 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
     setCurrentMessage("")
     setIsTyping(true)
 
+    // Determine next conversation stage
+    const nextStage = getNextStage(conversationStage, newUserMessageCount)
+    
     // Simulate AI response delay
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: getRandomResponse(selectedCategory || 'umum'),
+        text: getContextualResponse(nextStage, selectedCategory || 'umum'),
         isUser: false,
         timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
       }
       setMessages(prev => [...prev, aiResponse])
+      setConversationStage(nextStage)
       setIsTyping(false)
     }, 1500 + Math.random() * 1000)
   }
