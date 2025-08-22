@@ -19,36 +19,48 @@ interface ChatInterfaceProps {
   onBack?: () => void
 }
 
+const openingMessages = [
+  "Hai 👋 Aku di sini buat dengerin kamu. Lagi pengen curhat apa hari ini?",
+  "Aku siap nemenin kamu. Gak usah sungkan, ceritain aja apa yang lagi kamu rasain ya 😊", 
+  "Semua cerita kamu penting. Mau mulai dari hal kecil atau besar, aku dengerin kok 💙"
+]
+
 const mockResponses = {
   cinta: [
-    "Wah, masalah cinta memang berat ya. Aku di sini untuk mendengarkan ceritamu. Mau cerita lebih detail?",
-    "Perasaan kamu valid banget. Cinta emang bikin naik turun seperti roller coaster. Gimana perasaanmu sekarang?",
-    "Aku paham kalau lagi patah hati itu sakit banget. Yuk cerita, siapa tau bisa sedikit lega setelah bercerita."
+    "Waduh, urusan hati emang ribet ya... Aku paham banget perasaan kamu. Mau cerita lebih detail? Aku siap dengerin 💕",
+    "Cinta tuh kadang bikin kita naik turun kayak roller coaster ya. Gimana sih perasaan kamu sekarang? Boleh curhatin semua kok",
+    "Aku ngerti banget kalau lagi patah hati tuh sakit banget. Yuk cerita aja, siapa tau abis cerita jadi agak mendingan 🤗",
+    "Masalah cinta emang ga ada yang mudah ya. Tapi kamu ga sendiri kok, aku di sini buat dengerin semua keluh kesah kamu"
   ],
   keluarga: [
-    "Keluarga memang kompleks ya. Kadang yang paling dekat malah yang bikin kita paling kesal. Mau cerita apa yang terjadi?", 
-    "Aku tahu konflik keluarga itu berat banget. Kamu ga sendiri kok, banyak orang yang ngalamin hal serupa.",
-    "Family drama emang exhausting. Yuk cerita detail, mungkin kita bisa cari jalan keluarnya bareng-bareng."
+    "Keluarga tuh kadang yang paling dekat tapi paling bikin kesel ya 😅 Mau cerita apa yang lagi terjadi?", 
+    "Aku tahu drama keluarga tuh berat banget di hati. Kamu ga sendirian kok yang ngalamin gini, banyak yang sama kayak kamu",
+    "Wah, keluarga emang kompleks banget ya hubungannya. Yuk cerita detail, mungkin kita bisa pikirin bareng gimana ngatasinya",
+    "Rumah harusnya tempat yang paling nyaman, tapi kadang malah jadi tempat yang bikin capek ya... Cerita aja deh"
   ],
   pekerjaan: [
-    "Kerja emang stress banget kadang. Apalagi kalau ada drama sama rekan kerja atau deadline yang kejar-kejaran.",
-    "Burnout itu real banget. Mau cerita apa yang bikin kamu capek di kantor?",
-    "Masalah karir memang bikin overthinking ya. Aku siap mendengarkan semua keluh kesahmu."
+    "Duh, kerjaan emang bisa bikin stress parah ya. Apalagi kalau bos atau rekan kerja yang bikin ribet 😤",
+    "Burnout tuh nyata banget loh. Kerja terus menerus tanpa break emang bikin lelah jiwa raga. Gimana kondisi kamu?",
+    "Masalah karir emang bikin overthinking mulu ya. Tenang, aku siap dengerin semua uneg-uneg kamu tentang kerjaan",
+    "Kantor drama atau deadline yang kejar-kejaran? Apapun itu, yuk cerita biar agak lega"
   ],
   sekolah: [
-    "Sekolah/kuliah emang pressure-nya gede banget ya. Tugas numpuk, ujian, plus drama sama temen.",
-    "Academic pressure itu nyata banget. Kamu ga sendirian yang ngerasa kewalahan sama semua ini.",
-    "Masa sekolah/kuliah harusnya fun, tapi kadang malah bikin stress. Mau cerita apa yang lagi bikin berat?"
+    "Sekolah/kuliah emang tekanannya gede banget ya sekarang. Tugas numpuk, ujian, belum lagi drama sosial 😮‍💨",
+    "Academic pressure tuh real banget! Kamu ga sendirian yang ngerasa kewalahan sama semua tuntutan ini",
+    "Harusnya masa sekolah/kuliah tuh fun ya, tapi kok malah bikin stress gini. Apa sih yang paling bikin kamu berat?",
+    "Dari PR yang ga ada habisnya sampe masalah sama temen sekelas, emang capek ya. Yuk cerita semua"
   ],
   pertemanan: [
-    "Masalah sama teman emang sakit hati banget. Apalagi kalau sama orang yang kita anggap dekat.",
-    "Friendship drama itu exhausting. Yuk cerita, mungkin kita bisa brainstorm gimana handle situasinya.",
-    "Temen yang toxic emang bikin capek mental. Aku siap dengerin semua cerita kamu."
+    "Masalah sama temen tuh kadang lebih sakit daripada putus sama pacar loh 😔 Mau cerita kenapa?",
+    "Drama pertemanan emang exhausting banget. Yuk cerita, siapa tau kita bisa mikirin bareng gimana handle situasinya",
+    "Temen yang toxic atau yang ga supportive emang bikin capek mental ya. Aku siap dengerin cerita kamu",
+    "Persahabatan yang rumit emang bikin bingung ya. Kadang ga tau harus gimana. Cerita aja dulu yuk"
   ],
   umum: [
-    "Hai! Aku di sini buat dengerin cerita kamu. Apapun itu, feel free to share ya.",
-    "Kadang kita cuma butuh seseorang yang mau dengerin tanpa judge. Aku siap mendengarkan.",
-    "Yuk cerita apa aja yang lagi ada di pikiran kamu. No judgment here! 💙"
+    "Apapun yang lagi ada di pikiran kamu, cerita aja ya. Aku di sini buat dengerin tanpa judge 🤗",
+    "Kadang kita emang cuma butuh tempat buat cerita ya, tanpa perlu saran atau solusi. Aku siap dengerin",
+    "Hidup emang kadang berat, kadang ringan ya. Mau cerita hal kecil atau besar, semuanya penting kok buat aku 💙",
+    "Yuk sharing aja apa yang lagi bikin kamu kepikiran. Gak ada yang salah kok dengan perasaan kamu"
   ]
 }
 
@@ -69,9 +81,10 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category)
+    const randomOpeningMessage = openingMessages[Math.floor(Math.random() * openingMessages.length)]
     const welcomeMessage: Message = {
       id: Date.now().toString(),
-      text: "Halo! Aku Teman Curhat kamu. Aku di sini untuk mendengarkan apapun yang ingin kamu ceritakan. Semua yang kamu bagikan akan tetap aman dan tanpa judgment. 😊",
+      text: randomOpeningMessage,
       isUser: false,
       timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
     }
