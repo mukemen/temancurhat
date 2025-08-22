@@ -17,5 +17,6 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/temancurhat/",  // ⚠️ sesuai nama repo GitHub kamu
+  // ⚡ kalau development → "/", kalau production → "/temancurhat/"
+  base: mode === "development" ? "/" : "/temancurhat/",
 }));
