@@ -24,3 +24,11 @@ export default defineConfig({
   plugins: [react()],
   base: '/temancurhat/'
 })
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+
+// ganti "temancurhat" sesuai nama repo kamu di GitHub
+export default defineConfig({
+  plugins: [react()],
+  base: '/temancurhat/',
+})
