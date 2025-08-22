@@ -2,8 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import componentTagger from "lovable-tagger";
-import VitePluginRewriteAll from "vite-plugin-rewrite-all";
 
+// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "0.0.0.0",
@@ -12,12 +12,12 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === "development" && componentTagger(),
-    VitePluginRewriteAll()
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/temancurhat/", // sesuai nama repo
+  // ⚡ kalau development pakai "/", kalau production pakai "/temancurhat/"
+  base: mode === "development" ? "/" : "/temancurhat/",
 }));
