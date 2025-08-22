@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -52,6 +53,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				warm: {
+					DEFAULT: 'hsl(var(--warm))',
+					foreground: 'hsl(var(--warm-foreground))'
+				},
+				calm: {
+					DEFAULT: 'hsl(var(--calm))',
+					foreground: 'hsl(var(--calm-foreground))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -67,6 +76,18 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			backgroundImage: {
+				'gradient-warm': 'var(--gradient-warm)',
+				'gradient-calm': 'var(--gradient-calm)',
+				'gradient-hero': 'var(--gradient-hero)'
+			},
+			boxShadow: {
+				'gentle': 'var(--shadow-gentle)',
+				'warm': 'var(--shadow-warm)'
+			},
+			transitionTimingFunction: {
+				'gentle': 'var(--transition-gentle)'
 			},
 			keyframes: {
 				'accordion-down': {
