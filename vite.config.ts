@@ -11,24 +11,13 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // ⚠️ Ganti sesuai nama repo GitHub kamu
+  base: "/temancurhat/",
 }));
-export default defineConfig({
-  plugins: [react()],
-  base: '/temancurhat/'
-})
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-
-// ganti "temancurhat" sesuai nama repo kamu di GitHub
-export default defineConfig({
-  plugins: [react()],
-  base: '/temancurhat/',
-})
